@@ -28,4 +28,4 @@ steps:
 # https://aka.ms/yaml
 - task: SonarQubeAnalyze@6
   inputs:
-    jdkversion: 'JAVA_HOME_17_X64'
+    jdkVersion: 'JAVA_HOME'
