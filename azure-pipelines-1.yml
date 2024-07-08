@@ -29,13 +29,12 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    echo "Changing directory to nest_palestia"
     cd nest_palestia
-    echo "Running npm install"
-    npm install
-  displayName: 'npm install'
+    rm -rf package-lock.json   # Delete package-lock.json file
+    npm install                # Install dependencies
+    npm update                 # Update dependencies
+  displayName: 'npm install and update'
 
 - script: |
-    echo "Running npm build"
     npm run build
   displayName: 'npm build'
