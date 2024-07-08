@@ -31,6 +31,7 @@ steps:
 - script: |
     cd nest_palestia
     rm -rf package-lock.json   # Delete package-lock.json file
+    npm cache clean --force    # Clean npm cache
     npm install                # Install dependencies
     npm update                 # Update dependencies
   displayName: 'npm install and update'
