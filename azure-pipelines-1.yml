@@ -10,9 +10,10 @@ jobs:
 - job: owaspcheck
   displayName: 'owasp check'
   steps:
-    - task: dependency-check-build-task@6
-      inputs:
-        projectName: 'PalestiaToday'
-        scanPath: '.'
-        format: 'HTML'
-        uploadReports: true
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'dockerHub_connection'
+      repository: 'palestia'
+      command: 'buildAndPush'
+      Dockerfile: 'nest_palestia/Dockerfile'
+  
