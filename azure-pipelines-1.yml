@@ -10,22 +10,23 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
+- checkout: self
+  fetchDepth: 0
+
 - script: |
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-- task: SonarQubePrepare@6
+
+- task: SonarCloudPrepare@2
   inputs:
-    SonarQube: 'sonarqube_connection'
+    SonarCloud: 'sonarCloud_connection'
+    organization: 'hadil'
     scannerMode: 'CLI'
     configMode: 'manual'
-    cliProjectKey: 'palestiaToday'
-    cliProjectName: 'palestiaToday'
+    cliProjectKey: 'hadilahmed0383_palestia_today'
+    cliProjectName: 'palestia_today'
     cliSources: '.'
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-- task: SonarQubeAnalyze@6
-  inputs:
-    jdkVersion: 'JAVA_HOME'
+    
+    
