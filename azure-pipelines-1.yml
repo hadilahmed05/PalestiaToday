@@ -7,6 +7,11 @@ pool:
   name: Default
 
 steps:
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y git
+  displayName: 'Install Git'
+
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
@@ -18,7 +23,6 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-
 - task: SonarCloudPrepare@2
   inputs:
     SonarCloud: 'sonarCloud_connection'
@@ -28,5 +32,3 @@ steps:
     cliProjectKey: 'hadilahmed0383_palestia_today'
     cliProjectName: 'palestia_today'
     cliSources: '.'
-    
-    
