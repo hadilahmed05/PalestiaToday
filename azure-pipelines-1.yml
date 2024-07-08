@@ -23,14 +23,16 @@ steps:
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
 
-- task: NodeTool@0
+- task: UseNode@1
   inputs:
-    versionSpec: '18.x'
+    version: '16.x'
   displayName: 'Install Node.js'
 
 - script: |
-    npm install -g @angular/cli
-    cd angular
-    npm install --force
-    ng build 
-  displayName: 'npm install and build'
+    cd nest_palestia
+    npm install
+  displayName: 'npm install'
+
+- script: |
+    npm run build
+  displayName: 'npm build'
