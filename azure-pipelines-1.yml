@@ -11,8 +11,9 @@ jobs:
   displayName: 'Build Frontend Docker Image'
   steps:
   - task: Docker@2
+    displayName: 'Build Frontend Docker Image'
     inputs:
       command: 'build'
-      Dockerfile: '$(Build.SourcesDirectory)/angular/Dockerfile'  
+      Dockerfile: '$(Build.SourcesDirectory)/angular/Dockerfile'
       tags: |
         $(Build.BuildId)
