@@ -6,67 +6,13 @@ trigger:
 pool:
   name: Default
 
-steps:
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y git
-  displayName: 'Install Git'
-
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- checkout: self
-  fetchDepth: 0
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
-- task: SonarCloudPrepare@2
-  inputs:
-    SonarCloud: 'sonarCloud_connection'
-    organization: 'hadil'
-    scannerMode: 'CLI'
-    configMode: 'manual'
-    cliProjectKey: 'hadilahmed0383_palestia_today'
-    cliProjectName: 'palestia_today'
-    cliSources: '.'
-
-- task: NodeTool@0
-  inputs:
-    versionSpec: '18.x'
-  displayName: 'Install Node.js'
-
-- script: |
-    npm install -g @angular/cli
-    cd angular
-    npm install --force
-    ng build 
-  displayName: 'npm install and build'
-
-- task: UseNode@1
-  inputs:
-    version: '16.x'
-  displayName: 'Install Node.js'
-
-# Check Node.js and npm versions
-- script: |
-    node --version
-    npm --version
-  displayName: 'Verify Node.js and npm versions'
-
-# Navigate to project directory, clean npm cache, install dependencies, and build
-- script: |
-    cd nest_palestia
-    rm -rf package-lock.json   # Delete package-lock.json file
-    npm cache clean --force    # Clean npm cache
-    npm install --verbose      # Install dependencies with verbose output
-    npm update --verbose       # Update dependencies with verbose output
-    npm run build --verbose    # Build project with verbose output
-  displayName: 'npm install, update, and build with verbose output'
-
-
-- task: SonarCloudAnalyze@2
-  inputs:
-    jdkversion: 'JAVA_HOME_17_X64'
+jobs:
+- job: BuildFrontendDockerImage
+  displayName: 'Build Frontend Docker Image'
+  steps:
+  - task: Docker@2
+    inputs:
+      command: 'build'
+      Dockerfile: '$(Build.SourcesDirectory)/angular/Dockerfile'  
+      tags: |
+        $(Build.BuildId)
