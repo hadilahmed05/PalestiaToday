@@ -1,5 +1,3 @@
-# Starter pipeline
-
 trigger:
 - main
 
@@ -7,13 +5,30 @@ pool:
   name: Default
 
 jobs:
-- job: owaspcheck
-  displayName: 'owasp check'
+- job: dockerPush
+  displayName: 'dockerpush'
   steps:
+  # Login to Docker Hub
   - task: Docker@2
     inputs:
+      command: 'login'
       containerRegistry: 'dockerHub_connection'
+
+  # Build the Docker image
+  - task: Docker@2
+    inputs:
+      command: 'build'
       repository: 'palestia'
-      command: 'buildAndPush'
       Dockerfile: 'nest_palestia/Dockerfile'
-  
+      tags: |
+        $(Build.BuildId)
+        latest
+
+  # Push the Docker image to Docker Hub
+  - task: Docker@2
+    inputs:
+      command: 'push'
+      repository: 'palestia'
+      tags: |
+        $(Build.BuildId)
+        latest
