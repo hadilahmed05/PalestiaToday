@@ -7,35 +7,13 @@ pool:
   name: Default
 
 steps:
-- script: |
-    sudo apt-get update
-    sudo apt-get install -y git
-  displayName: 'Install Git'
-
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- checkout: self
-  fetchDepth: 0
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
-
 - task: UseNode@1
   inputs:
     version: '16.x'
   displayName: 'Install Node.js'
 
+# Check Node.js and npm versions
 - script: |
-    cd nest_palestia
-    rm -rf package-lock.json   # Delete package-lock.json file
-    npm cache clean --force    # Clean npm cache
-    npm install                # Install dependencies
-    npm update                 # Update dependencies
-  displayName: 'npm install and update'
-
-- script: |
-    npm run build
-  displayName: 'npm build'
+    node --version
+    npm --version
+  displayName: 'Verify Node.js and npm versions'
