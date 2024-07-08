@@ -32,15 +32,15 @@ steps:
     cliProjectKey: 'hadilahmed0383_palestia_today'
     cliProjectName: 'palestia_today'
     cliSources: '.'
-- task: NodeTool@0
+
+- task: UseNode@0
   inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+    version: '18.x'
+  displayName: 'Install Node.js 18.x'
 
 - script: |
     npm install -g @angular/cli
+    cd frontend
     npm install
     ng build --prod
   displayName: 'npm install and build'
-
-
