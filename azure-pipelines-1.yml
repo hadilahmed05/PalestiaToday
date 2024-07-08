@@ -18,7 +18,7 @@ jobs:
   - task: Docker@2
     inputs:
       command: 'build'
-      repository: 'palestia'
+      repository: 'hadil0505/palestia'
       Dockerfile: 'nest_palestia/Dockerfile'
       tags: |
         $(Build.BuildId)
@@ -28,7 +28,7 @@ jobs:
   - task: Docker@2
     inputs:
       command: 'push'
-      repository: 'palestia'
+      repository: 'hadil0505/palestia'
       tags: |
         $(Build.BuildId)
         latest
