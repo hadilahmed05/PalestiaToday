@@ -29,10 +29,13 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
+    echo "Changing directory to nest_palestia"
     cd nest_palestia
+    echo "Running npm install"
     npm install
   displayName: 'npm install'
 
 - script: |
+    echo "Running npm build"
     npm run build
-  displayName: 'npm run build'
+  displayName: 'npm build'
