@@ -4,11 +4,12 @@ trigger:
 pool:
   name: Default
 
-jobs:
+jobs: 
 - job: SecurityScan
   displayName: 'Security Scan Docker Image'
   steps:
   - task: trivy@1
     inputs:
-      image: 'hadil0505/palestia:palestiaBackend'
-      severities: 'HIGH,CRITICAL'
+      version: 'latest'
+      imageName: 'hadil0505/palestia:palestiaBackend'
+      severities: 'CRITICAL,HIGH'
