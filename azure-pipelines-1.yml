@@ -5,10 +5,14 @@ trigger:
 
 pool:
   name: Default
+
 jobs:
 - job: SecurityScan
   displayName: 'Scan container image for vulnerabilities'
   steps:
   - task: CmdLine@2
     inputs:
-      script: 'trivy image --format table -o trivy -image-report.html hadil0505/palestia:palestiaBackend'
+      script: |
+        trivy image --format table \
+                    --output trivy-image-report.html \
+                    hadil0505/palestia:palestiaBackend
