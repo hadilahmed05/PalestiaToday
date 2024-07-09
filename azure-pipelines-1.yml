@@ -11,5 +11,5 @@ jobs:
   - task: trivy@1
     inputs:
       version: 'latest'
-      imageName: 'hadil0505/palestia:palestiaBackend'
+      image: 'hadil0505/palestia:palestiaBackend'
       severities: 'CRITICAL,HIGH'
