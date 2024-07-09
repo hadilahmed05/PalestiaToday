@@ -16,3 +16,7 @@ jobs:
       docker: false
       version: 'latest'
 
+  - task: PublishPipelineArtifact@1
+    inputs:
+      artifactName: 'trivy-results'
+      targetPath: '/tmp/trivy-results-0.9395298357853183.json'
