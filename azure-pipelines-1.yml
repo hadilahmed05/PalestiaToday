@@ -4,6 +4,9 @@ trigger:
 pool:
   name: Default
 
+variables:
+  imageNameTag: 'palestiaBackend'  # Define the name tag for the image here
+
 jobs:
 - job: BuildAndPushDockerImage
   displayName: 'Build and Push Docker Image to Docker Hub'
@@ -15,7 +18,9 @@ jobs:
       repository: 'hadil0505/palestia'
       Dockerfile: 'nest_palestia/Dockerfile'
       command: 'build'
-      tags: '$(Build.BuildId)'
+      tags: |
+        $(Build.BuildId)
+        $(imageNameTag)
 
   - task: Docker@2
     displayName: 'Push Docker Image to Docker Hub'
@@ -23,4 +28,7 @@ jobs:
       containerRegistry: 'dockerHub_connection'
       repository: 'hadil0505/palestia'
       command: 'push'
-      tags: '$(Build.BuildId)'
+      tags: |
+        $(Build.BuildId)
+        $(imageNameTag)
+
