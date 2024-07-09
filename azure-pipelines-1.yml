@@ -5,7 +5,7 @@ pool:
   name: Default
 
 variables:
-  imageNameTag: 'palestiaBackend'  # Define the name tag for the image here
+  imageNameTag: 'palestiaFrontend'  # Define the name tag for the image here
 
 jobs:
 - job: BuildAndPushDockerImage
@@ -16,7 +16,7 @@ jobs:
     inputs:
       containerRegistry: 'dockerHub_connection'
       repository: 'hadil0505/palestia'
-      Dockerfile: 'nest_palestia/Dockerfile'
+      Dockerfile: 'angular/Dockerfile'
       command: 'build'
       tags: |
         $(Build.BuildId)
