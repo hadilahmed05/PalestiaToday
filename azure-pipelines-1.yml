@@ -4,31 +4,13 @@ trigger:
 pool:
   name: Default
 
-variables:
-  imageNameTag: 'palestiaFrontend'  # Define the name tag for the image here
-
 jobs:
-- job: BuildAndPushDockerImage
-  displayName: 'Build and Push Docker Image to Docker Hub'
+- job: SecurityScan
+  displayName: 'Security Scan Docker Image'
   steps:
-  - task: Docker@2
-    displayName: 'Build Docker Image'
+  - task: trivy@1
     inputs:
-      containerRegistry: 'dockerHub_connection'
-      repository: 'hadil0505/palestia'
-      Dockerfile: 'angular/Dockerfile'
-      command: 'build'
-      tags: |
-        $(Build.BuildId)
-        $(imageNameTag)
-
-  - task: Docker@2
-    displayName: 'Push Docker Image to Docker Hub'
-    inputs:
-      containerRegistry: 'dockerHub_connection'
-      repository: 'hadil0505/palestia'
-      command: 'push'
-      tags: |
-        $(Build.BuildId)
-        $(imageNameTag)
-
+      version: 'latest'
+      path: 'hadil0505/palestia:palestiaBackend'  # Specify the full repository and image tag
+      loginDockerConfig: true  # Login to Docker registry if needed
+      severities: 'HIGH'  # Set severity level for vulnerabilities
