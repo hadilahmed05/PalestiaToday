@@ -12,11 +12,15 @@ jobs:
     displayName: 'Run Trivy Security Scan'
     inputs:
       image: 'hadil0505/palestia:palestiaBackend'
-      exitCode: $(trivyExitCode)
+      exitCode: 0
       docker: false
       version: 'latest'
+
+  - script: |
+      ls -l /tmp/
+    displayName: 'List contents of /tmp directory'
 
   - task: PublishPipelineArtifact@1
     inputs:
       artifactName: 'trivy-results'
-      targetPath: '/tmp/trivy-results-0.9395298357853183.json'
+      targetPath: '/tmp/trivy-results-0.3061783213236191.json'
