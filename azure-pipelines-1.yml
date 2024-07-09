@@ -10,7 +10,5 @@ jobs:
   steps:
   - task: trivy@1
     inputs:
-      version: 'latest'
-      path: 'hadil0505/palestia:palestiaBackend'  # Specify the full repository and image tag
-      loginDockerConfig: true  # Login to Docker registry if needed
-      severities: 'HIGH'  # Set severity level for vulnerabilities
+      image: 'hadil0505/palestia:palestiaBackend'
+      severities: 'HIGH,CRITICAL'
