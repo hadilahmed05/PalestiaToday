@@ -7,12 +7,12 @@ pool:
   name: Default
 
 jobs:
-- job: SecurityScan
-  displayName: 'Scan container image for vulnerabilities'
+- job: SecurityScanForFrontendImage
+  displayName: 'Scan container image for vulnerabilities in fontend image'
   steps:
   - task: CmdLine@2
     inputs:
       script: |
         trivy image --format table \
                     --output trivy-image-report.html \
-                    hadil0505/palestia:palestiaBackend
+                    hadil0505/palestia:palestiaFrontend 
