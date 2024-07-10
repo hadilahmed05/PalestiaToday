@@ -1,0 +1,46 @@
+# Starter pipeline
+
+trigger:
+- main
+
+pool:
+  name: Default
+
+steps:
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y git
+  displayName: 'Install Git'
+
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- checkout: self
+  fetchDepth: 0
+
+- script: |
+    echo Add other tasks to build, test, and deploy your project.
+    echo See https://aka.ms/yaml
+  displayName: 'Run a multi-line script'
+
+# Ensure correct Node.js version
+- task: UseNode@1
+  inputs:
+    version: '16.x'
+  displayName: 'Install Node.js'
+
+# Check Node.js and npm versions
+- script: |
+    node --version
+    npm --version
+  displayName: 'Verify Node.js and npm versions'
+
+# Navigate to project directory, clean npm cache, install dependencies, and build
+- script: |
+    cd nest_palestia
+    rm -rf package-lock.json   # Delete package-lock.json file
+    npm cache clean --force    # Clean npm cache
+    npm install --verbose      # Install dependencies with verbose output
+    npm update --verbose       # Update dependencies with verbose output
+    npm run build --verbose    # Build project with verbose output
+  displayName: 'npm install, update, and build with verbose output'

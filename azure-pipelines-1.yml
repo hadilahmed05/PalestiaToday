@@ -1,0 +1,158 @@
+trigger:
+- main
+
+pool:
+  name: Default
+
+variables:
+  frontendImageNameTag: 'palestiaFrontend'
+  backendImageNameTag: 'palestiaBackend'
+  dockerHubRepository: 'hadil0505/palestia'
+
+stages:
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: BuildFrontend
+    displayName: 'Build Frontend'
+    steps:
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '18.x'
+      displayName: 'Install Node.js for frontend'
+
+    - script: |
+        npm install -g @angular/cli
+      displayName: 'Install Angular CLI'
+
+    - script: |
+        cd angular
+        npm install --force
+        ng build
+      displayName: 'npm install and build'
+
+  - job: BuildBackend
+    displayName: 'Build Backend'
+    steps:
+    - task: UseNode@1
+      inputs:
+        version: '16.x'
+      displayName: 'Install Node.js for backend'
+
+    - script: |
+        cd nest_palestia
+        rm -rf package-lock.json   # Delete package-lock.json file
+        npm cache clean --force    # Clean npm cache
+        npm install --verbose      # Install dependencies with verbose output
+        npm update --verbose       # Update dependencies with verbose output
+        npm run build --verbose    # Build project with verbose output
+      displayName: 'npm install, update, and build with verbose output'
+
+- stage: Analysis
+  displayName: 'Analysis Stage'
+  dependsOn: Build
+  jobs:
+  - job: SonarCloudAnalysis
+    displayName: 'SonarCloud Analysis'
+    steps:
+    - task: SonarCloudPrepare@2
+      inputs:
+        SonarCloud: 'sonarCloud_connection'
+        organization: 'hadil'
+        scannerMode: 'CLI'
+        configMode: 'manual'
+        cliProjectKey: 'hadilahmed0383_palestia_today'
+        cliProjectName: 'palestia_today'
+        cliSources: '.'
+
+    - task: SonarCloudAnalyze@2
+      inputs:
+        jdkversion: 'JAVA_HOME_17_X64'
+
+  - job: DependencyCheck
+    displayName: 'Dependency Check'
+    steps:
+    - task: dependency-check-build-task@6
+      inputs:
+        projectName: 'PalestiaToday'
+        scanPath: '.'
+        format: 'HTML'
+        uploadReports: true
+
+- stage: BuildDockerImages
+  displayName: 'Build Docker Images'
+  dependsOn: Analysis
+  jobs:
+  - job: BuildDockerImages
+    displayName: 'Build Frontend and Backend Docker Images'
+    steps:
+    - task: Docker@2
+      displayName: 'Build Frontend Docker Image'
+      inputs:
+        containerRegistry: 'dockerHub_connection'
+        repository: '$(dockerHubRepository)'
+        Dockerfile: 'angular/Dockerfile'
+        command: 'build'
+        tags: |
+          $(Build.BuildId)
+          $(frontendImageNameTag)
+
+    - task: Docker@2
+      displayName: 'Build Backend Docker Image'
+      inputs:
+        containerRegistry: 'dockerHub_connection'
+        repository: '$(dockerHubRepository)'
+        Dockerfile: 'nest_palestia/Dockerfile'
+        command: 'build'
+        tags: |
+          $(Build.BuildId)
+          $(backendImageNameTag)
+
+- stage: ScanDockerImages
+  displayName: 'Scan Docker Images'
+  dependsOn: BuildDockerImages
+  jobs:
+  - job: ScanFrontendImage
+    displayName: 'Scan Frontend Docker Image for Vulnerabilities'
+    steps:
+    - script: |
+        trivy image --format table \
+                    --output trivy-frontend-image-report.html \
+                    $(dockerHubRepository):$(frontendImageNameTag)
+      displayName: 'Scan Frontend Docker Image'
+
+  - job: ScanBackendImage
+    displayName: 'Scan Backend Docker Image for Vulnerabilities'
+    steps:
+    - script: |
+        trivy image --format table \
+                    --output trivy-backend-image-report.html \
+                    $(dockerHubRepository):$(backendImageNameTag)
+      displayName: 'Scan Backend Docker Image'
+
+- stage: PushDockerImages
+  displayName: 'Push Docker Images'
+  dependsOn: ScanDockerImages
+  jobs:
+  - job: PushDockerImages
+    displayName: 'Push Frontend and Backend Docker Images to Docker Hub'
+    steps:
+    - task: Docker@2
+      displayName: 'Push Frontend Docker Image to Docker Hub'
+      inputs:
+        containerRegistry: 'dockerHub_connection'
+        repository: '$(dockerHubRepository)'
+        command: 'push'
+        tags: |
+          $(Build.BuildId)
+          $(frontendImageNameTag)
+
+    - task: Docker@2
+      displayName: 'Push Backend Docker Image to Docker Hub'
+      inputs:
+        containerRegistry: 'dockerHub_connection'
+        repository: '$(dockerHubRepository)'
+        command: 'push'
+        tags: |
+          $(Build.BuildId)
+          $(backendImageNameTag)
