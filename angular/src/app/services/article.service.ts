@@ -13,8 +13,8 @@ export class ArticleService {
 
 
 
-  private apiUrl = 'http://localhost:3000/article';
-  private  apiUrl2='http://localhost:3000/interactionarticle' ;
+  private apiUrl = 'http://172.213.195.162/article';
+  private  apiUrl2='http://172.213.195.162/interactionarticle' ;
 
   constructor(private http: HttpClient,private authservice : AuthService) { }
 

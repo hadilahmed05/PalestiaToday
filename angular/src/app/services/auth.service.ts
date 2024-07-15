@@ -19,7 +19,7 @@ export class AuthService {
         return !!token;
     }
 
-    private apiUrl = 'http://localhost:3000';
+    private apiUrl = 'http://172.213.195.162:3000';
     isLoggedIn = new BehaviorSubject<boolean>(false);
     // Expose the observable part of the isLoggedIn subject
     isLoggedIn$ = this.isLoggedIn.asObservable();
