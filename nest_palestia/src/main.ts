@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   const corsOptions: CorsOptions = {
-    origin: 'http://localhost:4200', // Update with your Angular app's URL
+    origin: ['http://localhost:4200', 'http://172.213.194.230'], // Update with your Angular app's URL
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
